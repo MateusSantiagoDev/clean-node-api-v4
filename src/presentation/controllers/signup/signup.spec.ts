@@ -1,4 +1,5 @@
 import { SignUpController } from './signup'
+import { MissingParamError } from '../../error/missing-param-error'
 
 describe('SignUp Controller', () => {
   // verificar se o campo nome foi enviado
@@ -13,6 +14,6 @@ describe('SignUp Controller', () => {
     }
     const httpResponse = sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new Error('missing param error'))
+    expect(httpResponse.body).toEqual(new MissingParamError('name'))
   })
 })
