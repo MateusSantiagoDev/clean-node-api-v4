@@ -5,12 +5,14 @@ import { Encrypter } from '../../protocols/encrypter'
 
 export class DbAccount implements AddAccountRepository {
   private readonly encrypter: Encrypter
-  constructor (encrypter: Encrypter) {
+  private readonly addAccountRepository: AddAccountRepository
+  constructor (encrypter: Encrypter, addAccountRepository: AddAccountRepository) {
     this.encrypter = encrypter
+    this.addAccountRepository = addAccountRepository
   }
 
   async add (account: AddAccountModel): Promise<AccountModel> {
     await this.encrypter.encrypt(account.password)
-    return new Promise(resolve => resolve(null))
+    return this.addAccountRepository.add(account)
   }
 }
