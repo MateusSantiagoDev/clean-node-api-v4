@@ -18,6 +18,14 @@ describe('Bcrypt Adapter', () => {
     const sut = makeSut()
     const hashSpy = jest.spyOn(bcrypt, 'hash')
     await sut.encrypt('any_value')
-    expect(hashSpy).toBeCalledWith('any_value')
+    expect(hashSpy).toBeCalledWith('any_value', salt)
+  })
+
+  // teste para garantir que se a integração der certo
+  // o bcrypt vai retornar a hash gerada
+  test('Should call bcrypt with correct values', async () => {
+    const sut = makeSut()
+    const hash = await sut.encrypt('any_value')
+    expect(hash).toEqual('hash')
   })
 })
