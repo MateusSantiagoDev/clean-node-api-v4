@@ -2,6 +2,7 @@ import { HttpRequest, HttpResponse } from '../../protocols/http'
 import { MissingParamError } from '../../error/missing-param-error'
 import { badRequest } from '../../helpers/http-helper'
 import { Controller } from '../../protocols/controller'
+import { InvalidParamError } from '../../error/invalid-param-error'
 
 export class SignUpController implements Controller {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -14,10 +15,7 @@ export class SignUpController implements Controller {
     }
 
     if (httpRequest.body.password !== httpRequest.body.confirmPassword) {
-      return {
-        statusCode: 400,
-        body: 'invalid_password'
-      }
+      return badRequest(new InvalidParamError('confirmPassword'))
     }
   }
 }

@@ -1,5 +1,6 @@
 import { SignUpController } from './signup'
 import { MissingParamError } from '../../error/missing-param-error'
+import { InvalidParamError } from '../../error/invalid-param-error'
 
 const makeSut = (): SignUpController => {
   return new SignUpController()
@@ -79,6 +80,6 @@ describe('SignUp Controller', () => {
     }
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual('invalid_password')
+    expect(httpResponse.body).toEqual(new InvalidParamError('confirmPassword'))
   })
 })
