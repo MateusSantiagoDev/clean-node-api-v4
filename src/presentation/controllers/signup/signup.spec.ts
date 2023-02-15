@@ -1,20 +1,4 @@
-interface HttpResponse {
-  statusCode: number
-  body: any
-}
-
-interface HttpRequest {
-  body: any
-}
-
-export class SignUpController {
-  handle (httpRequest: HttpRequest): HttpResponse {
-    return {
-      statusCode: 400,
-      body: new Error('missing param error')
-    }
-  }
-}
+import { SignUpController } from './signup'
 
 describe('SignUp Controller', () => {
   // verificar se o campo nome foi enviado
