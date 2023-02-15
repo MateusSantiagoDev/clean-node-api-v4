@@ -21,5 +21,11 @@ export class SignUpController {
         body: new MissingParamError('password')
       }
     }
+    if (!httpRequest.body.confirmPassword) {
+      return {
+        statusCode: 400,
+        body: new MissingParamError('confirmPassword')
+      }
+    }
   }
 }
