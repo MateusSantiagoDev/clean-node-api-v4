@@ -12,24 +12,31 @@ export class SignUpController implements Controller {
   }
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    const requiredFields = ['name', 'email', 'password', 'confirmPassword']
+    try {
+      const requiredFields = ['name', 'email', 'password', 'confirmPassword']
 
-    // verificar se esta faltando algum campo
-    for (const field of requiredFields) {
-      if (!httpRequest.body[field]) {
-        return badRequest(new MissingParamError(field))
+      // verificar se esta faltando algum campo
+      for (const field of requiredFields) {
+        if (!httpRequest.body[field]) {
+          return badRequest(new MissingParamError(field))
+        }
       }
-    }
 
-    // verificar se password e consfirmPassword são diferentes
-    if (httpRequest.body.password !== httpRequest.body.confirmPassword) {
-      return badRequest(new InvalidParamError('confirmPassword'))
-    }
+      // verificar se password e consfirmPassword são diferentes
+      if (httpRequest.body.password !== httpRequest.body.confirmPassword) {
+        return badRequest(new InvalidParamError('confirmPassword'))
+      }
 
-    // verificar se o email é invalido
-    const invalid = this.emailValidator.isValid(httpRequest.body.email)
-    if (!invalid) {
-      return badRequest(new InvalidParamError('email'))
+      // verificar se o email é invalido
+      const invalid = this.emailValidator.isValid(httpRequest.body.email)
+      if (!invalid) {
+        return badRequest(new InvalidParamError('email'))
+      }
+    } catch (err) {
+      return {
+        statusCode: 500,
+        body: 'Internal server error'
+      }
     }
   }
 }
