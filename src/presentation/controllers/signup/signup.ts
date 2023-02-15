@@ -1,10 +1,6 @@
-import { HttpRequest, HttpResponse } from '../../protocols/http'
-import { MissingParamError } from '../../error/missing-param-error'
+import { HttpRequest, HttpResponse, Controller, EmailValidator, AddAccount } from './signup-protocols'
+import { MissingParamError, InvalidParamError } from '../../error'
 import { badRequest, serverError, ok } from '../../helpers/http-helper'
-import { Controller } from '../../protocols/controller'
-import { InvalidParamError } from '../../error/invalid-param-error'
-import { EmailValidator } from '../../protocols/email-validator'
-import { AddAccount } from '../../../data/domain/usecase/add-account'
 
 export class SignUpController implements Controller {
   private readonly emailValidator: EmailValidator
@@ -25,17 +21,21 @@ export class SignUpController implements Controller {
         }
       }
 
+      // desestruturando o httpRequest.body
+      const { email, password, confirmPassword } = httpRequest.body
+
       // verificar se password e consfirmPassword são diferentes
-      if (httpRequest.body.password !== httpRequest.body.confirmPassword) {
+      if (password !== confirmPassword) {
         return badRequest(new InvalidParamError('confirmPassword'))
       }
 
       // verificar se o email é invalido
-      const invalid = this.emailValidator.isValid(httpRequest.body.email)
+      const invalid = this.emailValidator.isValid(email)
       if (!invalid) {
         return badRequest(new InvalidParamError('email'))
       }
 
+      // criando conta de usuário, retornando statusCode 200 e o body
       const response = await this.addaccount.add({
         name: 'valid_name',
         email: 'valid_email@mail.com',
