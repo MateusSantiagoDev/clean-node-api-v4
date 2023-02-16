@@ -20,5 +20,12 @@ export const MongoHelper = {
   // método que ira acessar uma collection para ser usada nos testes
   getCollection (name: string): Collection {
     return this.Client.db().collection(name)
+  },
+
+  // função que vai mapear e subistituir o _id com undescore
+  // do banco de dados por um id sem undescore
+  mapper: (collection: any): any => {
+    const { _id, ...collectionData } = collection
+    return Object.assign({}, collectionData, { id: _id })
   }
 }
