@@ -11,6 +11,6 @@ export default (app: Express): void => {
   // lista com o path completo desses arquivos
   fg.sync('**/src/main/routes/**routes.ts').map(async file => {
     const route = (await import(`../../../${file}`)).default
-    route(router)
+    return route(router)
   })
 }
